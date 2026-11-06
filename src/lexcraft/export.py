@@ -22,20 +22,20 @@ def _py() -> str:
     return sys.executable
 
 
-def _llama_cpp_tools() -> tuple[str | None, str | None]:
-    """Locate llama.cpp's converter + quantizer ($LLAMA_CPP_DIR or PATH)."""
+def _llama_cpp_converter() -> list[str] | None:
+    """Command for llama.cpp's HF->GGUF converter ($LLAMA_CPP_DIR or PATH).
+
+    $LLAMA_CPP_PYTHON picks the interpreter (the converter needs torch, which lexcraft does not).
+    """
     root = os.environ.get("LLAMA_CPP_DIR")
-    convert = quantize = None
+    convert = None
     if root:
-        c = Path(root) / "convert_hf_to_gguf.py"
+        c = Path(root).expanduser() / "convert_hf_to_gguf.py"
         convert = str(c) if c.exists() else None
-        for q in (Path(root) / "build" / "bin" / "llama-quantize", Path(root) / "llama-quantize"):
-            if q.exists():
-                quantize = str(q)
-                break
     convert = convert or shutil.which("convert_hf_to_gguf.py")
-    quantize = quantize or shutil.which("llama-quantize")
-    return convert, quantize
+    if not convert:
+        return None
+    return [os.environ.get("LLAMA_CPP_PYTHON") or _py(), convert]
 
 
 def plan(
@@ -85,36 +85,20 @@ def plan(
         ),
     ]
     if gguf_out:
-        convert, quantize = _llama_cpp_tools()
-        if not convert:
+        cmd = _llama_cpp_converter()
+        if not cmd:
             warnings.append(
                 "GGUF skipped: llama.cpp converter not found. Clone llama.cpp and set "
                 "LLAMA_CPP_DIR, or put convert_hf_to_gguf.py on PATH."
             )
         else:
-            f16 = gguf_out.with_name(gguf_out.stem.replace("q8_0", "f16") + ".f16.gguf")
-            cmd = (
-                [convert]
-                if os.access(convert, os.X_OK) and not convert.endswith(".py")
-                else [_py(), convert]
-            )
             steps.append(
                 ExportStep(
-                    "Convert to GGUF (f16)",
-                    [*cmd, str(fused_dir), "--outfile", str(f16), "--outtype", "f16"],
-                    f16,
+                    "Convert to GGUF (Q8_0)",
+                    [*cmd, str(fused_dir), "--outfile", str(gguf_out), "--outtype", "q8_0"],
+                    gguf_out,
                 )
             )
-            if quantize:
-                steps.append(
-                    ExportStep(
-                        "Quantize GGUF (Q8_0)",
-                        [quantize, str(f16), str(gguf_out), "Q8_0"],
-                        gguf_out,
-                    )
-                )
-            else:
-                warnings.append("llama-quantize not found: leaving the f16 GGUF unquantized.")
     return steps, warnings
 
 
@@ -127,6 +111,11 @@ def run_steps(
         if on_step:
             on_step(i, step)
         step.output.parent.mkdir(parents=True, exist_ok=True)
+        # Each step regenerates its output; some tools refuse to overwrite.
+        if step.output.is_dir():
+            shutil.rmtree(step.output)
+        elif step.output.exists():
+            step.output.unlink()
         proc = subprocess.run(step.cmd, capture_output=True, text=True)
         if log:
             with log.open("a") as f:

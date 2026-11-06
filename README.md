@@ -191,9 +191,10 @@ for the conversion:
 
 ```bash
 git clone https://github.com/ggml-org/llama.cpp ~/llama.cpp
-cmake -S ~/llama.cpp -B ~/llama.cpp/build && cmake --build ~/llama.cpp/build -j --target llama-quantize
-uv pip install -r ~/llama.cpp/requirements/requirements-convert_hf_to_gguf.txt
-LLAMA_CPP_DIR=~/llama.cpp uv run lexcraft export
+uv venv ~/llama.cpp/.venv      # the converter needs torch; keep it out of lexcraft's env
+uv pip install --python ~/llama.cpp/.venv/bin/python \
+  -r ~/llama.cpp/requirements/requirements-convert_hf_to_gguf.txt "transformers>=5"
+LLAMA_CPP_DIR=~/llama.cpp LLAMA_CPP_PYTHON=~/llama.cpp/.venv/bin/python uv run lexcraft export --gguf
 cd artifacts/models && ollama create lexcraft -f Modelfile
 ollama run lexcraft "You can't sublet the flat without asking me first."
 ```
