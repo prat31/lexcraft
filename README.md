@@ -2,7 +2,7 @@
 
 # ⚖ lexcraft
 
-**Turn plain text into formal, jurisdiction-neutral legal language — locally, with a 1.7B model.**
+**Rewrite plain text in formal legal language, on your own machine, with a 1.7B model.**
 
 [![CI](https://github.com/prat31/lexcraft/actions/workflows/ci.yml/badge.svg)](https://github.com/prat31/lexcraft/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
@@ -13,71 +13,64 @@
 
 </div>
 
-lexcraft is an open-source CLI that rewrites everyday text — emails, house rules, policies, notes —
-into legal drafting style while keeping the **meaning, facts and formatting** intact. It runs a small
-open model ([Qwen3 1.7B](https://huggingface.co/Qwen/Qwen3-1.7B)) with a LoRA adapter trained for this
-one job, so it works offline on a laptop.
+lexcraft is a command-line tool that takes everyday text (emails, house rules, policies, notes) and
+rewrites it in the style of a legal document. It keeps the facts, numbers and formatting of the
+original. It runs [Qwen3 1.7B](https://huggingface.co/Qwen/Qwen3-1.7B) with a LoRA adapter trained
+for this task, so it works offline on a laptop.
 
 > [!WARNING]
-> lexcraft changes the *style* of text. It is not a lawyer and its output is not legal advice.
-> Always have important documents reviewed by a qualified professional.
-
-### LoRA vs base model
-
-<img src="docs/assets/eval-base-vs-lora.svg" alt="Eval: lexcraft LoRA vs Qwen3 1.7B base" width="860">
-
-The adapter lifts the judge's rubric score from 0.49 to 0.81 and keeps every fact; details in
-[Evaluation](#evaluation).
+> lexcraft changes how text is worded. It does not give legal advice, and it can change meaning.
+> Have anything important checked by a lawyer.
 
 ## Contents
 
-- [Features](#features)
+- [What it does](#what-it-does)
 - [Quickstart](#quickstart)
 - [Usage](#usage)
 - [How it works](#how-it-works)
 - [Evaluation](#evaluation)
-- [Train your own adapter](#train-your-own-adapter)
-- [Run with Ollama](#run-with-ollama)
+- [Training](#training)
+- [Ollama](#ollama)
 - [Project layout](#project-layout)
 - [Known limitations](#known-limitations)
 
-## Features
+## What it does
 
-- **Formatting preserved by code, not by luck.** Markdown headings, lists, quotes, code blocks, tables,
-  links, URLs, emails and bold/italic survive exactly; only the prose is rewritten.
-- **Fact guard.** Every block is checked: numbers, amounts, dates, emails, URLs and negations must
-  survive. Failing blocks are retried, then kept as the original rather than silently changed.
-- **Small and local.** ~1 GB 4-bit model, ~0.9 s per sentence on an M1 Pro. No data leaves your machine.
-- **Hardware-aware.** MLX on Apple Silicon; llama.cpp (GGUF) on CUDA, Vulkan or CPU; or any
-  OpenAI-compatible endpoint.
-- **Reproducible eval.** Promptfoo matrix + blind pairwise LLM judge + NLI meaning checks, with
-  every model role swappable in one YAML file.
+- Keeps Markdown intact. Headings, lists, quotes, code blocks, tables, links, URLs, emails and
+  bold/italic are handled in code; the model only sees the prose.
+- Checks every block after rewriting. Numbers, amounts, dates, emails, URLs, placeholders and
+  negations have to survive. If a block fails, it is retried once; if it fails again, the original
+  block is kept.
+- Runs locally. The 4-bit model is about 1 GB and takes roughly 0.9 s per sentence on an M1 Pro.
+  Nothing is sent anywhere unless you point it at a remote API.
+- Uses MLX on Apple Silicon, llama.cpp (GGUF) on CUDA, Vulkan or CPU, or any OpenAI-compatible
+  endpoint.
 
 ## Quickstart
 
-Requires Python 3.11–3.13 and [uv](https://docs.astral.sh/uv/) (or pip).
+You need Python 3.11–3.13 and [uv](https://docs.astral.sh/uv/) (pip works too).
 
 ```bash
 git clone https://github.com/prat31/lexcraft.git
 cd lexcraft
-uv sync                      # Apple Silicon: installs the MLX backend
-uv run lexcraft doctor       # shows your hardware and what is ready
+uv sync                      # on Apple Silicon this installs the MLX backend
+uv run lexcraft doctor       # shows your hardware and which model files are ready
 ```
 
-Then train the adapter (≈30–40 min on an M1 Pro, see [below](#train-your-own-adapter)) and paste text:
+The adapter isn't checked in, so train it first (about an hour on an M1 Pro, see [Training](#training)):
 
 ```bash
 uv run lexcraft data build
 uv run lexcraft train
-uv run lexcraft              # paste text, finish with Ctrl-D
+uv run lexcraft              # paste text, then Ctrl-D
 ```
 
 <details>
 <summary>Other platforms</summary>
 
 ```bash
-# NVIDIA / CPU inference via llama.cpp (GGUF)
-CMAKE_ARGS="-DGGML_CUDA=on" uv sync --extra llamacpp   # drop CMAKE_ARGS for CPU-only
+# llama.cpp (GGUF) inference on NVIDIA or CPU
+CMAKE_ARGS="-DGGML_CUDA=on" uv sync --extra llamacpp   # leave out CMAKE_ARGS for CPU only
 # LoRA training on NVIDIA GPUs
 uv sync --extra cuda
 ```
@@ -88,24 +81,24 @@ uv sync --extra cuda
 
 ```bash
 lexcraft                                  # interactive: paste text, Ctrl-D to finish
-lexcraft rewrite notes.md                 # rewrite a file, print the result
-lexcraft rewrite notes.md -o legal.md     # write to a file
+lexcraft rewrite notes.md                 # rewrite a file and print the result
+lexcraft rewrite notes.md -o legal.md     # write the result to a file
 cat email.txt | lexcraft rewrite > out.txt
-lexcraft rewrite notes.md --blocks        # per-block before/after table with fact checks
+lexcraft rewrite notes.md --blocks        # before/after table per block, with check results
 lexcraft rewrite notes.md --copy          # also copy the result to the clipboard
-lexcraft rewrite notes.md --no-adapter    # compare against the base model
+lexcraft rewrite notes.md --no-adapter    # run the base model without the LoRA
 ```
 
 | Command | What it does |
 |---|---|
-| `lexcraft doctor` | Hardware, available backends, which model files are ready |
-| `lexcraft data build \| stats \| sample` | Validate, dedupe and split the training pairs |
-| `lexcraft train` | Train the LoRA (MLX on Apple Silicon, PEFT on CUDA), with early stopping |
-| `lexcraft export` | Fuse the LoRA, build an 8-bit MLX model and a GGUF + Ollama Modelfile |
-| `lexcraft serve` | OpenAI-compatible API for the local model |
-| `lexcraft eval run \| models \| report` | Run and inspect evaluations |
+| `lexcraft doctor` | Shows hardware, available backends and which model files exist |
+| `lexcraft data build \| stats \| sample` | Validates, dedupes and splits the training pairs |
+| `lexcraft train` | Trains the LoRA (MLX on Apple Silicon, PEFT on CUDA) with early stopping |
+| `lexcraft export` | Fuses the LoRA and writes an 8-bit MLX model, plus a GGUF and Ollama Modelfile |
+| `lexcraft serve` | Serves the local model over an OpenAI-compatible API |
+| `lexcraft eval run \| models \| report` | Runs and shows evaluations |
 
-Configuration lives in [`lexcraft.toml`](lexcraft.toml); secrets go in `.env` (see [`.env.example`](.env.example)).
+Settings are in [`lexcraft.toml`](lexcraft.toml). API keys go in `.env` (see [`.env.example`](.env.example)).
 
 ## How it works
 
@@ -122,19 +115,24 @@ flowchart LR
     G --> H[Legal version]
 ```
 
-- **Model:** `Qwen/Qwen3-1.7B` (Apache-2.0). On Apple Silicon training and inference use the 4-bit MLX
-  build (QLoRA). LoRA rank 16, alpha 32, all layers, prompt-masked loss, cosine schedule, early stopping
-  on validation loss.
-- **Data:** 1,250 hand-written plain → legal pairs across 24 categories (contracts, leases, employment,
-  privacy, terms of service, notices, everyday agreements, headings, list items, placeholders,
-  casual/slang input). Every pair passes the same fact checks used at runtime.
-  Split 80/10/10, stratified by category: [`data/seed/`](data/seed).
+**Model.** `Qwen/Qwen3-1.7B` (Apache-2.0). On Apple Silicon, training and inference use the 4-bit
+MLX build (QLoRA). The LoRA uses rank 16, alpha 32, all layers, loss on the answer only, a cosine
+learning-rate schedule and early stopping on validation loss.
+
+**Data.** 1,410 plain → legal pairs in 27 categories, in [`data/seed/`](data/seed). They cover
+contracts, leases, employment, privacy, terms of service, notices, letters and complaints, long
+paragraphs with many facts, everyday agreements, headings, list items, placeholders, casual or slang
+input, and input that starts with a request like "make this legal:". The pairs were generated with
+Claude and filtered with the same fact checks the tool runs on its output. `lexcraft data build`
+splits them 80/10/10 by category: 1,128 train, 141 validation, 141 test.
 
 ## Evaluation
 
-The chart at the top is the latest published run: **LoRA vs the same base model without the adapter**, 20 stratified test items,
-judged by DeepSeek V4 Pro ([full report](eval/results/base-vs-lora/report.md) ·
-[interactive HTML](eval/results/base-vs-lora/report.html) · [raw results](eval/results/base-vs-lora/results.json)).
+<img src="docs/assets/eval-base-vs-lora.svg" alt="Eval: lexcraft LoRA vs Qwen3 1.7B base" width="860">
+
+The last published run compares the LoRA with the same base model without it, on 20 test items,
+judged by DeepSeek V4 Pro ([report](eval/results/base-vs-lora/report.md) ·
+[HTML](eval/results/base-vs-lora/report.html) · [raw results](eval/results/base-vs-lora/results.json)).
 
 | | LoRA | Base |
 |---|---|---|
@@ -145,49 +143,74 @@ judged by DeepSeek V4 Pro ([full report](eval/results/base-vs-lora/report.md) ·
 | Meaning (NLI entailment →/←) | 0.84 / 0.92 | **0.97 / 0.99** |
 | Pairwise (win / tie / loss) | 8 / 2 / 10 | |
 
-**How to read it:** the adapter makes the model write like a lawyer (rubric +0.32, register 3.5×) and
-stops it dropping facts. The base model scores higher on meaning mostly because it barely changes the
-input. The pairwise judge puts meaning first, so the two come out even (50% win+tie, 95% CI 30–70%).
-With 20 items this is a smoke test, not proof — run the full 125-item test set for a real result.
+The LoRA writes much more like a legal document and keeps every number. The base model scores higher
+on meaning mostly because it often returns the input nearly unchanged. The LoRA's real weakness is that
+it sometimes adds parties or details that aren't in the original, for example turning "you" into
+"the Customer".
 
-**How it is measured**
+Be careful with these numbers:
 
-- [Promptfoo](https://promptfoo.dev) runs every system on the same prompt and test items.
-- Deterministic checks (facts, placeholders, negations, region-neutral terms, no preamble, no contractions).
-- `llm-rubric` and a **pairwise judge run in both orders** to cancel position bias; disagreements count as ties.
-- Sentence-embedding similarity and **bidirectional NLI entailment** (does each text imply the other?).
-- The judge must come from a different model family than every compared system; the runner refuses otherwise.
+- 20 items is a smoke test. The 95% interval on the pairwise result is 30–70%.
+- This run used an older adapter (trained on 1,000 pairs) and an older judge setup. In that setup the
+  base model could win a pairwise comparison just by copying the input. The judge is stricter now
+  (see below), and the table will be replaced after the next full run on the 141-item test set.
 
-**Run it yourself**
+### How it is measured
+
+- [Promptfoo](https://promptfoo.dev) runs every model on the same prompt and test items.
+- Code checks: facts, placeholders, negations, no country-specific terms, no preamble, no
+  contractions, and legal register. An output that is a copy or light edit of the input fails the
+  register check.
+- An LLM rubric score, plus a pairwise judge that sees both outputs in both orders. The judge marks
+  each output pass/fail on "reads as legal drafting" and "keeps the meaning". An output that fails
+  either can't win. If both fail, the item is counted as "both fail", not a tie. If the two orders
+  disagree, it's a tie.
+- Embedding similarity and NLI entailment in both directions (does each text imply the other?).
+- The judge has to come from a different model family than every model being compared. The runner
+  refuses to start otherwise.
+
+### Running it
 
 ```bash
-uv sync --extra eval           # + Node.js 20+ for Promptfoo (fetched via npx)
+uv sync --extra eval           # also needs Node.js 20+ for Promptfoo (run through npx)
 cp .env.example .env           # add your API key(s)
-uv run lexcraft eval models    # see systems, judges and the family guard
+uv run lexcraft eval models    # list models and judges, check the family rule
 uv run lexcraft eval run --systems lexcraft-lora,qwen3-1.7b-base --limit 20 --open
-uv run lexcraft eval run       # everything in eval/models.yaml, full test set
+uv run lexcraft eval run       # every model in eval/models.yaml, full test set
 ```
 
-Swap or add models in [`eval/models.yaml`](eval/models.yaml) — any OpenAI-compatible endpoint works.
-Ad hoc: `--add <endpoint>:<model>`, `--judge <model>`.
+Models are configured in [`eval/models.yaml`](eval/models.yaml); any OpenAI-compatible endpoint
+works. To try one without editing the file, use `--add <endpoint>:<model>`, and pick a judge with
+`--judge <name>`. If a model only accepts one temperature, set `temperature:` on its entry.
 
-## Train your own adapter
+## Training
 
 ```bash
-uv run lexcraft data build              # validate + split data/seed → data/processed
-uv run lexcraft train                   # live loss, val loss, early stopping, best checkpoint
-uv run lexcraft train --iters 400 --lr 5e-5 --rank 8   # override any setting
-uv run lexcraft export                  # fused 8-bit MLX (+ GGUF if llama.cpp is available)
+uv run lexcraft data build              # validate and split data/seed into data/processed
+uv run lexcraft train                   # shows train/val loss, stops early, keeps the best checkpoint
+uv run lexcraft train --iters 400 --lr 5e-5 --rank 8   # override settings from lexcraft.toml
+uv run lexcraft export                  # fused 8-bit MLX model (+ GGUF if llama.cpp is set up)
 ```
 
-Training on a 16 GB M1 Pro takes ~5 s/step (peak ~3.3 GB GPU memory). Add pairs to `data/seed/*.jsonl`
-(see [CONTRIBUTING.md](CONTRIBUTING.md)) and rebuild.
+With the current settings (600 steps, batch size 4, sequences up to 768 tokens), training on a
+16 GB M1 Pro takes about 7 s per step and peaks at about 3.8 GB of GPU memory. That's a bit over an
+hour for a full run; early stopping can end it sooner. To add training pairs, put them in
+`data/seed/*.jsonl` (see [CONTRIBUTING.md](CONTRIBUTING.md)) and run `data build` again.
 
-## Run with Ollama
+## Ollama
 
-`lexcraft export` writes a GGUF and a matching [`Modelfile`](ollama/Modelfile) (same system prompt and
-chat format the adapter was trained with). It needs [llama.cpp](https://github.com/ggml-org/llama.cpp)
-for the conversion:
+You can run the published model without cloning this repo:
+
+```bash
+ollama run pratcode07/lexcraft "I received a defective coffee maker and your support refused a refund. If I don't get one within 15 days, I'll sue."
+```
+
+It's a rewriter, not a chat model. Send one piece of text per message. A follow-up like "now make it
+first person" gets rewritten as more text. Use `/clear` between unrelated texts.
+
+To build it yourself, `lexcraft export --gguf` writes a GGUF and a matching
+[`Modelfile`](ollama/Modelfile) with the same system prompt and chat format used in training. The
+conversion needs [llama.cpp](https://github.com/ggml-org/llama.cpp):
 
 ```bash
 git clone https://github.com/ggml-org/llama.cpp ~/llama.cpp
@@ -199,38 +222,40 @@ cd artifacts/models && ollama create lexcraft -f Modelfile
 ollama run lexcraft "You can't sublet the flat without asking me first."
 ```
 
-> Ollama runs the raw model. The CLI adds structure preservation and the fact guard on top — to get
-> both, point lexcraft at Ollama: set `backend = "remote"`, `remote_base_url = "http://localhost:11434/v1"`
-> and `remote_model = "lexcraft"` in `lexcraft.toml`.
+Ollama only runs the model. The Markdown handling and fact checks live in the CLI. To get both, point
+lexcraft at Ollama in `lexcraft.toml`: `backend = "remote"`,
+`remote_base_url = "http://localhost:11434/v1"`, `remote_model = "lexcraft"`.
 
 ## Project layout
 
 ```
 src/lexcraft/
-  cli.py            Typer CLI (rewrite, doctor, data, train, export, serve, eval)
-  structure.py      markdown segmentation, placeholders, emphasis handling
-  engine.py         rewrite → verify → retry → fallback → reassemble
-  verify.py         deterministic fact / negation / region / register checks
-  backends/         mlx · llama.cpp · OpenAI-compatible remote
+  cli.py            CLI (rewrite, doctor, data, train, export, serve, eval)
+  structure.py      Markdown segmentation, placeholders, emphasis
+  engine.py         rewrite → check → retry → fall back → reassemble
+  verify.py         fact, negation, region and register checks
+  backends/         MLX, llama.cpp, OpenAI-compatible remote
   train.py          MLX QLoRA and CUDA PEFT training, early stopping
   export.py         fuse, quantize, GGUF, Ollama Modelfile
   evaluation/       Promptfoo config, pairwise judge, NLI metrics, reports
-data/seed/          training pairs (source of truth)
-eval/models.yaml    every eval model role, swappable
+data/seed/          training pairs (the source of truth)
+eval/models.yaml    models used in evals
 eval/results/       published eval runs
 ```
 
 ## Known limitations
 
-- **Meaning drift on loose phrasing.** In the demo above, "split three ways" becomes "three equal
-  installments" and "unless everyone agrees" is dropped. The fact guard catches numbers, dates and
-  negations, not every change of meaning — read the output.
-- **Pronouns become roles** ("you" → "the Tenant"). This is normal legal drafting but invents party
-  names; the judge counts it against the model.
-- **English only**, trained on short blocks (≤ a few sentences). Long paragraphs are rewritten as one block.
-- Results above are from a small run; frontier models (GPT, Gemini) still score higher on meaning.
+- It can change meaning when the input is loose. In the demo above, "split three ways" became "three
+  (3) equal installments" and "unless everyone agrees" was dropped. The checks catch lost numbers,
+  dates and negations, not every change in meaning, so read the output.
+- It sometimes adds a party or detail that isn't in the input, such as "the Company" or "of the
+  following month".
+- Voice depends on the kind of text. Letters, emails, notices and complaints should keep "I", "we"
+  and "you"; agreements, terms and rules use roles like "the Tenant". Short, ambiguous sentences can
+  go either way.
+- English only. It was trained on short blocks, and a long paragraph is rewritten as one block.
 
 ## License
 
-[Apache-2.0](LICENSE). The base model [Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B) is also
-Apache-2.0. Training pairs in `data/seed/` were written with Claude for this project.
+[Apache-2.0](LICENSE). The base model, [Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B), is also
+Apache-2.0. The training pairs in `data/seed/` were generated with Claude for this project.

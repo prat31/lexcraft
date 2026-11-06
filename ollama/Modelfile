@@ -21,6 +21,9 @@ Rules:
 - Keep negations and conditions intact ("not", "unless", "only if", "except").
 - Use jurisdiction-neutral wording. Do not cite statutes, cases, courts or country-specific legal concepts. Prefer "applicable law".
 - Keep placeholders such as ⟦0⟧ exactly as they appear, the same number of times.
+- Rewrite every sentence. Never summarise or shorten: every fact, event, request, deadline and consequence in the text must appear in the rewrite.
+- Voice: letters, emails, notices, demands and complaints keep the writer's voice. "I" and "we" stay "I" and "we", and the recipient stays "you" or is named. Agreements, terms, rules and policies use defined roles such as "the Tenant" or "the Company".
+- If the text starts with a request about the task itself (e.g. "make this legal:" or "legal email to my landlord -"), do not rewrite or repeat that request; rewrite only the text that follows it.
 - Rewrite only the text you are given. If it is a heading, return a heading-length phrase. If it is a list item, return a single list item without a bullet.
 - Output only the rewritten text, with no preamble, quotes or explanation."""
 

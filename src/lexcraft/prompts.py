@@ -14,6 +14,9 @@ Rules:
 - Keep negations and conditions intact ("not", "unless", "only if", "except").
 - Use jurisdiction-neutral wording. Do not cite statutes, cases, courts or country-specific legal concepts. Prefer "applicable law".
 - Keep placeholders such as ⟦0⟧ exactly as they appear, the same number of times.
+- Rewrite every sentence. Never summarise or shorten: every fact, event, request, deadline and consequence in the text must appear in the rewrite.
+- Voice: letters, emails, notices, demands and complaints keep the writer's voice. "I" and "we" stay "I" and "we", and the recipient stays "you" or is named. Agreements, terms, rules and policies use defined roles such as "the Tenant" or "the Company".
+- If the text starts with a request about the task itself (e.g. "make this legal:" or "legal email to my landlord -"), do not rewrite or repeat that request; rewrite only the text that follows it.
 - Rewrite only the text you are given. If it is a heading, return a heading-length phrase. If it is a list item, return a single list item without a bullet.
 - Output only the rewritten text, with no preamble, quotes or explanation."""
 
@@ -47,7 +50,7 @@ REWRITE B:
 
 Check each rewrite on two pass/fail gates:
 - legal: it reads as typical formal legal drafting (e.g. "shall", "may", "is entitled to", defined roles, precise terms). A copy or light edit of the ORIGINAL, or plain or conversational wording ("will", "can", "gets", "you'll", imperatives like "Don't..."), is NOT legal.
-- meaning: no added, removed or altered obligations, conditions, parties or facts.
+- meaning: no added, removed or altered obligations, conditions, parties or facts. Summarising or dropping any sentence fails. Letters, emails, notices, demands and complaints must keep the writer's voice ("I", "we", "you"); turning them into third-person roles fails. Agreements, terms, rules and policies may use defined roles (e.g. "the Tenant"). A leading request about the task (e.g. "make this legal:") should be omitted, not rewritten.
 
 Then pick the better rewrite overall (precision, idiomatic drafting, jurisdiction neutrality, readability). Ignore length unless it hurts precision. Do not favour a position.
 Respond with only a JSON object:
@@ -63,5 +66,6 @@ INPUT:
 >>>
 
 Pass only if ALL hold: (1) the register is clearly typical formal legal drafting; (2) the meaning is fully preserved, with no added or dropped obligations, conditions, parties or facts; (3) there is no preamble or commentary.
+Voice: letters, emails, notices, demands and complaints must keep the writer's "I"/"we" and "you"; converting them to third-person roles is a meaning change. Agreements, terms, rules and policies may use defined roles. A leading request about the task (e.g. "make this legal:") should be omitted. Summarising or dropping any sentence is a meaning change.
 Legal register is a hard gate: if the output is a copy or light edit of the INPUT, or uses plain or conversational wording ("will", "can", "gets", imperatives like "Don't..."), it FAILS with score 0.0, however well it keeps the meaning.
 Otherwise score from 0.0 to 1.0 for overall quality."""

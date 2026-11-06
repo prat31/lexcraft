@@ -16,6 +16,22 @@ class ExportStep:
     name: str
     cmd: list[str]
     output: Path
+    after: Callable[[Path], None] | None = None
+
+
+_THINK_OPT_OUT = "{%- if enable_thinking is defined and enable_thinking is false %}"
+_THINK_OPT_IN = "{%- if not (enable_thinking is defined and enable_thinking is true) %}"
+
+
+def default_no_think(model_dir: Path) -> None:
+    """Make the saved chat template skip thinking unless asked (the format the LoRA was trained on).
+
+    Ollama and llama.cpp use the template embedded in the GGUF; Qwen3's default is thinking on.
+    """
+    for name in ("chat_template.jinja", "tokenizer_config.json"):
+        f = model_dir / name
+        if f.exists():
+            f.write_text(f.read_text().replace(_THINK_OPT_OUT, _THINK_OPT_IN))
 
 
 def _py() -> str:
@@ -65,6 +81,7 @@ def plan(
                 "--dequantize",
             ],
             fused_dir,
+            after=default_no_think,
         ),
         ExportStep(
             f"Quantize for MLX ({q_bits}-bit)",
@@ -92,11 +109,31 @@ def plan(
                 "LLAMA_CPP_DIR, or put convert_hf_to_gguf.py on PATH."
             )
         else:
+            raw = gguf_out.with_suffix(".raw.gguf")
             steps.append(
                 ExportStep(
                     "Convert to GGUF (Q8_0)",
-                    [*cmd, str(fused_dir), "--outfile", str(gguf_out), "--outtype", "q8_0"],
+                    [*cmd, str(fused_dir), "--outfile", str(raw), "--outtype", "q8_0"],
+                    raw,
+                )
+            )
+            # Ollama prefers a GGUF's embedded Jinja template over the Modelfile TEMPLATE and then
+            # treats Qwen3 as a thinking model. Drop it so the Modelfile's no-think template is used.
+            script = Path(cmd[1]).parent / "gguf-py" / "gguf" / "scripts" / "gguf_new_metadata.py"
+            steps.append(
+                ExportStep(
+                    "Use the Modelfile chat template",
+                    [
+                        cmd[0],
+                        str(script),
+                        "--remove-metadata",
+                        "tokenizer.chat_template",
+                        str(raw),
+                        str(gguf_out),
+                        "--force",
+                    ],
                     gguf_out,
+                    after=lambda _out: raw.unlink(missing_ok=True),
                 )
             )
     return steps, warnings
@@ -123,6 +160,8 @@ def run_steps(
         if proc.returncode != 0:
             tail = (proc.stderr or proc.stdout).strip().splitlines()[-15:]
             raise RuntimeError(f"{step.name} failed:\n" + "\n".join(tail))
+        if step.after:
+            step.after(step.output)
 
 
 def modelfile(gguf_name: str) -> str:

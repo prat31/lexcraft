@@ -216,11 +216,11 @@ def train_mlx(
 
     t0 = time.time()
     model, tokenizer = load(args.model)[:2]
-    train_set, valid_set, _ = load_dataset(args, tokenizer)  # type: ignore[arg-type]
+    train_set, valid_set, _ = load_dataset(args, tokenizer)  # type: ignore[arg-type, unused-ignore]
     mw = MetricsWriter(adapter / "metrics.jsonl", on_event, cfg.early_stopping_patience)
     stopped = False
     try:
-        train_model(args, model, train_set, valid_set, training_callback=mw)  # type: ignore[arg-type]
+        train_model(args, model, train_set, valid_set, training_callback=mw)  # type: ignore[arg-type, unused-ignore]
     except EarlyStop:
         stopped = True
     summary = _summary("mlx", settings, adapter, cfg, t0, mw)

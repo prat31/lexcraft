@@ -148,3 +148,11 @@ def test_ollama_modelfile_in_sync():
     assert committed == modelfile("lexcraft-qwen3-1.7b-q8_0.gguf"), (
         "ollama/Modelfile is stale: regenerate with lexcraft export --gguf"
     )
+
+
+def test_default_no_think(tmp_path):
+    from lexcraft.export import _THINK_OPT_IN, _THINK_OPT_OUT, default_no_think
+
+    (tmp_path / "chat_template.jinja").write_text(f"a{_THINK_OPT_OUT}b")
+    default_no_think(tmp_path)
+    assert (tmp_path / "chat_template.jinja").read_text() == f"a{_THINK_OPT_IN}b"
