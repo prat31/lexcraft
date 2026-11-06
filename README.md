@@ -22,13 +22,70 @@ for this task, so it works offline on a laptop.
 > lexcraft changes how text is worded. It does not give legal advice, and it can change meaning.
 > Have anything important checked by a lawyer.
 
+## Evaluation
+
+<img src="docs/assets/eval-base-vs-lora.svg" alt="Eval: lexcraft LoRA vs Qwen3 1.7B base" width="860">
+
+The last published run compares the LoRA with the same base model without it, on 20 test items,
+judged by DeepSeek V4 Pro ([report](eval/results/base-vs-lora/report.md) ·
+[HTML](eval/results/base-vs-lora/report.html) · [raw results](eval/results/base-vs-lora/results.json)).
+
+| | LoRA | Base |
+|---|---|---|
+| Judge rubric score | **0.81** | 0.49 |
+| Passes all checks | **60%** | 15% |
+| Legal register | **0.49** | 0.14 |
+| Facts kept | **1.00** | 0.90 |
+| Meaning (NLI entailment →/←) | 0.84 / 0.92 | **0.97 / 0.99** |
+| Pairwise (win / tie / loss) | 8 / 2 / 10 | |
+
+The LoRA writes much more like a legal document and keeps every number. The base model scores higher
+on meaning mostly because it often returns the input nearly unchanged. The LoRA's real weakness is that
+it sometimes adds parties or details that aren't in the original, for example turning "you" into
+"the Customer".
+
+Be careful with these numbers:
+
+- 20 items is a smoke test. The 95% interval on the pairwise result is 30–70%.
+- This run used an older adapter (trained on 1,000 pairs) and an older judge setup. In that setup the
+  base model could win a pairwise comparison just by copying the input. The judge is stricter now
+  (see below), and the table will be replaced after the next full run on the 141-item test set.
+
+### How it is measured
+
+- [Promptfoo](https://promptfoo.dev) runs every model on the same prompt and test items.
+- Code checks: facts, placeholders, negations, no country-specific terms, no preamble, no
+  contractions, and legal register. An output that is a copy or light edit of the input fails the
+  register check.
+- An LLM rubric score, plus a pairwise judge that sees both outputs in both orders. The judge marks
+  each output pass/fail on "reads as legal drafting" and "keeps the meaning". An output that fails
+  either can't win. If both fail, the item is counted as "both fail", not a tie. If the two orders
+  disagree, it's a tie.
+- Embedding similarity and NLI entailment in both directions (does each text imply the other?).
+- The judge has to come from a different model family than every model being compared. The runner
+  refuses to start otherwise.
+
+### Running it
+
+```bash
+uv sync --extra eval           # also needs Node.js 20+ for Promptfoo (run through npx)
+cp .env.example .env           # add your API key(s)
+uv run lexcraft eval models    # list models and judges, check the family rule
+uv run lexcraft eval run --systems lexcraft-lora,qwen3-1.7b-base --limit 20 --open
+uv run lexcraft eval run       # every model in eval/models.yaml, full test set
+```
+
+Models are configured in [`eval/models.yaml`](eval/models.yaml); any OpenAI-compatible endpoint
+works. To try one without editing the file, use `--add <endpoint>:<model>`, and pick a judge with
+`--judge <name>`. If a model only accepts one temperature, set `temperature:` on its entry.
+
 ## Contents
 
+- [Evaluation](#evaluation)
 - [What it does](#what-it-does)
 - [Quickstart](#quickstart)
 - [Usage](#usage)
 - [How it works](#how-it-works)
-- [Evaluation](#evaluation)
 - [Training](#training)
 - [Ollama](#ollama)
 - [Project layout](#project-layout)
@@ -125,63 +182,6 @@ paragraphs with many facts, everyday agreements, headings, list items, placehold
 input, and input that starts with a request like "make this legal:". The pairs were generated with
 Claude and filtered with the same fact checks the tool runs on its output. `lexcraft data build`
 splits them 80/10/10 by category: 1,128 train, 141 validation, 141 test.
-
-## Evaluation
-
-<img src="docs/assets/eval-base-vs-lora.svg" alt="Eval: lexcraft LoRA vs Qwen3 1.7B base" width="860">
-
-The last published run compares the LoRA with the same base model without it, on 20 test items,
-judged by DeepSeek V4 Pro ([report](eval/results/base-vs-lora/report.md) ·
-[HTML](eval/results/base-vs-lora/report.html) · [raw results](eval/results/base-vs-lora/results.json)).
-
-| | LoRA | Base |
-|---|---|---|
-| Judge rubric score | **0.81** | 0.49 |
-| Passes all checks | **60%** | 15% |
-| Legal register | **0.49** | 0.14 |
-| Facts kept | **1.00** | 0.90 |
-| Meaning (NLI entailment →/←) | 0.84 / 0.92 | **0.97 / 0.99** |
-| Pairwise (win / tie / loss) | 8 / 2 / 10 | |
-
-The LoRA writes much more like a legal document and keeps every number. The base model scores higher
-on meaning mostly because it often returns the input nearly unchanged. The LoRA's real weakness is that
-it sometimes adds parties or details that aren't in the original, for example turning "you" into
-"the Customer".
-
-Be careful with these numbers:
-
-- 20 items is a smoke test. The 95% interval on the pairwise result is 30–70%.
-- This run used an older adapter (trained on 1,000 pairs) and an older judge setup. In that setup the
-  base model could win a pairwise comparison just by copying the input. The judge is stricter now
-  (see below), and the table will be replaced after the next full run on the 141-item test set.
-
-### How it is measured
-
-- [Promptfoo](https://promptfoo.dev) runs every model on the same prompt and test items.
-- Code checks: facts, placeholders, negations, no country-specific terms, no preamble, no
-  contractions, and legal register. An output that is a copy or light edit of the input fails the
-  register check.
-- An LLM rubric score, plus a pairwise judge that sees both outputs in both orders. The judge marks
-  each output pass/fail on "reads as legal drafting" and "keeps the meaning". An output that fails
-  either can't win. If both fail, the item is counted as "both fail", not a tie. If the two orders
-  disagree, it's a tie.
-- Embedding similarity and NLI entailment in both directions (does each text imply the other?).
-- The judge has to come from a different model family than every model being compared. The runner
-  refuses to start otherwise.
-
-### Running it
-
-```bash
-uv sync --extra eval           # also needs Node.js 20+ for Promptfoo (run through npx)
-cp .env.example .env           # add your API key(s)
-uv run lexcraft eval models    # list models and judges, check the family rule
-uv run lexcraft eval run --systems lexcraft-lora,qwen3-1.7b-base --limit 20 --open
-uv run lexcraft eval run       # every model in eval/models.yaml, full test set
-```
-
-Models are configured in [`eval/models.yaml`](eval/models.yaml); any OpenAI-compatible endpoint
-works. To try one without editing the file, use `--add <endpoint>:<model>`, and pick a judge with
-`--judge <name>`. If a model only accepts one temperature, set `temperature:` on its entry.
 
 ## Training
 
