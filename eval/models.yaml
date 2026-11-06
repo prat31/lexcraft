@@ -1,0 +1,62 @@
+# lexcraft eval: every model role lives here. Swap or add models by editing this file.
+# Secrets come from .env (api_key_env names the variable). Never put keys here.
+#
+# Roles
+#   primary     the system under test; compared pairwise against every other system
+#   candidates  local models served by `lexcraft serve` (LoRA, base model, ...)
+#   baselines   any OpenAI-compatible endpoint (frontier models, other local servers)
+#   judge       scores outputs; must not share a model family with any compared system
+#
+# CLI overrides:  lexcraft eval run --systems lexcraft-lora,gpt-6-luna --judge qwen3.8-max
+
+endpoints:
+  opencode-go:
+    base_url: https://opencode.ai/inference/go/openai/v1
+    api_key_env: OPENCODE_API_KEY
+
+primary: lexcraft-lora
+
+candidates:
+  - name: lexcraft-lora          # base model + our LoRA (or fused model if exported)
+    family: qwen
+  - name: qwen3-1.7b-base        # same base, no LoRA: shows what the adapter adds
+    family: qwen
+    no_adapter: true
+
+baselines:
+  - name: gpt-6-luna
+    endpoint: opencode-go
+    model: gpt-6-luna
+    family: openai
+  - name: gemini-4-argon
+    endpoint: opencode-go
+    model: gemini-4-argon
+    family: google
+
+judge:
+  name: deepseek-v4-pro
+  endpoint: opencode-go
+  model: deepseek-v4-pro
+  family: deepseek
+
+# Optional extra judges you can switch to with --judge <name>.
+alt_judges:
+  - name: qwen3.8-max          # NOTE: same family as the Qwen base model -> blocked by the guard
+    endpoint: opencode-go
+    model: qwen3.8-max
+    family: qwen
+  - name: kimi-k3.1-pro
+    endpoint: opencode-go
+    model: kimi-k3.1-pro
+    family: moonshot
+    temperature: 1.0           # the endpoint rejects any other temperature
+  - name: glm-5.3
+    endpoint: opencode-go
+    model: glm-5.3
+    family: zhipu
+
+settings:
+  temperature: 0.0
+  max_tokens: 1024
+  concurrency: 4          # parallel requests per remote provider
+  pairwise_both_orders: true

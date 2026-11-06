@@ -1,0 +1,59 @@
+description: 'lexcraft: plain text -> legal language'
+prompts:
+- file://prompt.json
+providers:
+- id: openai:chat:lexcraft-lora
+  label: lexcraft-lora
+  config:
+    apiBaseUrl: http://127.0.0.1:8765/v1
+    apiKey: local
+    temperature: 0.0
+    max_tokens: 1024
+- id: openai:chat:qwen3-1.7b-base
+  label: qwen3-1.7b-base
+  config:
+    apiBaseUrl: http://127.0.0.1:8766/v1
+    apiKey: local
+    temperature: 0.0
+    max_tokens: 1024
+defaultTest:
+  options:
+    provider:
+      id: openai:chat:deepseek-v4-pro
+      label: deepseek-v4-pro
+      config:
+        apiBaseUrl: https://opencode.ai/inference/go/openai/v1
+        apiKeyEnvar: OPENCODE_API_KEY
+        headers:
+          User-Agent: lexcraft-eval/0.1.0
+          x-opencode-session: lexcraft-a7dedd6e74-deepseek-v4-pro
+        temperature: 0.0
+        max_tokens: 4096
+  assert:
+  - type: python
+    value: file:///Users/prat/repos/lexcraft/eval/assertions/lexcraft_checks.py
+  - type: llm-rubric
+    value: 'You are grading a rewrite of the INPUT into formal, jurisdiction-neutral
+      legal language.
+
+
+      INPUT:
+
+      <<<
+
+      {{ text }}
+
+      >>>
+
+
+      Pass only if ALL hold: (1) the meaning is fully preserved, with no added or
+      dropped obligations, conditions, parties or facts; (2) the register is clearly
+      formal legal drafting; (3) there is no preamble or commentary.
+
+      Score from 0.0 to 1.0 for overall quality.'
+    metric: judge_rubric
+tests: file://tests.yaml
+evaluateOptions:
+  maxConcurrency: 4
+  cache: false
+sharing: false

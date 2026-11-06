@@ -1,0 +1,136 @@
+- description: 17_business-027
+  vars:
+    id: 17_business-027
+    text: The joint venture will last 5 years unless extended.
+    reference: The Joint Venture shall continue for a term of five (5) years unless
+      extended.
+    category: business_partnership
+- description: 23_casual-024
+  vars:
+    id: 23_casual-024
+    text: if u wanna cancel, do it before the 15th or u still pay for the month
+    reference: Any cancellation shall be made before the fifteenth (15th) day of the
+      month, failing which the fee for that month shall remain payable.
+    category: casual_inputs
+- description: 16_community-050
+  vars:
+    id: 16_community-050
+    text: Each apartment gets one vote.
+    reference: Each apartment shall be entitled to one (1) vote.
+    category: community_rules
+- description: 13_consumer-014
+  vars:
+    id: 13_consumer-014
+    text: If we cancel your flight, you can choose a refund or a new flight.
+    reference: If the Airline cancels a flight, the Passenger may elect to receive
+      either a refund or an alternative flight.
+    category: consumer_refunds
+- description: 03_confidentiality-050
+  vars:
+    id: 03_confidentiality-050
+    text: The board minutes are confidential and only directors may read them.
+    reference: The minutes of board meetings shall be confidential and accessible
+      solely to the directors.
+    category: contracts_confidentiality
+- description: 05_ip-026
+  vars:
+    id: 05_ip-026
+    text: You can't register any domain name that includes our brand.
+    reference: The Distributor shall not register any domain name incorporating the
+      Brand.
+    category: contracts_ip
+- description: 04_liability-008
+  vars:
+    id: 04_liability-008
+    text: The product is provided as is, with no guarantees.
+    reference: The Product is provided "as is", without warranty of any kind.
+    category: contracts_liability
+- description: 01_payment-010
+  vars:
+    id: 01_payment-010
+    text: We can stop working if you haven't paid for 45 days.
+    reference: The Provider may suspend performance of the Services if any amount
+      remains unpaid for a period of forty-five (45) days after its due date.
+    category: contracts_payment
+- description: 02_termination-026
+  vars:
+    id: 02_termination-026
+    text: We'll warn you 30 days before closing an inactive account.
+    reference: The Provider shall give not less than thirty (30) days' notice prior
+      to closing an inactive account.
+    category: contracts_termination
+- description: 06_employment-039
+  vars:
+    id: 06_employment-039
+    text: Don't come to work under the influence of alcohol or drugs.
+    reference: The Employee shall not report for work under the influence of alcohol
+      or drugs.
+    category: employment
+- description: 15_everyday-054
+  vars:
+    id: 15_everyday-054
+    text: Payment for the spot is due on the 1st.
+    reference: Payment for the parking space shall be due on the first (1st) day of
+      each month.
+    category: everyday_personal
+- description: 19_headings-004
+  vars:
+    id: 19_headings-004
+    text: Keeping things secret
+    reference: Confidentiality
+    category: format_headings
+- description: 20_list_items-002
+  vars:
+    id: 20_list_items-002
+    text: no smoking indoors
+    reference: the prohibition of smoking within the Premises;
+    category: format_list_items
+- description: 22_paragraphs-039
+  vars:
+    id: 22_paragraphs-039
+    text: All staff must complete the security course by October 31. Access will be
+      suspended for anyone who hasn't.
+    reference: All staff shall complete the security course by October 31. Access
+      shall be suspended for any staff member who has not completed the course by
+      that date.
+    category: format_paragraphs
+- description: 21_placeholders-021
+  vars:
+    id: 21_placeholders-021
+    text: Agree to ⟦0⟧ and ⟦1⟧ to continue.
+    reference: The User shall accept ⟦0⟧ and ⟦1⟧ in order to proceed.
+    category: format_placeholders
+- description: 07_lease-044
+  vars:
+    id: 07_lease-044
+    text: If the buyer can't get a mortgage, the deposit is returned.
+    reference: If the Buyer is unable to obtain mortgage financing, the deposit shall
+      be refunded to the Buyer.
+    category: leases_property
+- description: 18_loans_tech-007
+  vars:
+    id: 18_loans_tech-007
+    text: You can't sell the car until the loan is paid off.
+    reference: The Borrower shall not sell the Vehicle until the Loan has been repaid
+      in full.
+    category: loans_finance
+- description: 14_notices-026
+  vars:
+    id: 14_notices-026
+    text: If you don't respond within 14 days, I'll take the matter further.
+    reference: Should no response be received within fourteen (14) days, the Buyer
+      shall pursue the matter further.
+    category: notices_demands
+- description: 10_privacy-036
+  vars:
+    id: 10_privacy-036
+    text: Job applicant data is kept for 6 months and then deleted.
+    reference: Personal data of job applicants shall be retained for six (6) months
+      and deleted thereafter.
+    category: privacy_data
+- description: 09_sales-025
+  vars:
+    id: 09_sales-025
+    text: The buyer will pay $8,200 in cash at the time of handover.
+    reference: The Buyer shall pay $8,200 in cash upon handover of the Vehicle.
+    category: sales_delivery

@@ -1,0 +1,1713 @@
+{
+  "meta": {
+    "run_id": "20261106-024252",
+    "n_tests": 20,
+    "systems": "lexcraft-lora, qwen3-1.7b-base",
+    "judge": "deepseek-v4-pro",
+    "judge_family": "deepseek",
+    "test_file": "/Users/prat/repos/lexcraft/data/processed/test_pairs.jsonl"
+  },
+  "summary": {
+    "primary": "lexcraft-lora",
+    "systems": {
+      "qwen3-1.7b-base": {
+        "n": 20,
+        "errors": 0,
+        "pass_rate": 0.15,
+        "latency_ms_median": 522.5,
+        "metrics": {
+          "entail_bwd": 0.9919777572154999,
+          "entail_fwd": 0.9730666399002075,
+          "facts_preserved": 0.9,
+          "judge_rubric": 0.49,
+          "legal_register": 0.13712121212121212,
+          "negation_kept": 0.95,
+          "no_contractions": 0.85,
+          "no_preamble": 1.0,
+          "placeholders": 1.0,
+          "region_neutral": 1.0,
+          "similarity": 0.9714425593614578
+        }
+      },
+      "lexcraft-lora": {
+        "n": 20,
+        "errors": 0,
+        "pass_rate": 0.6,
+        "latency_ms_median": 874.5,
+        "metrics": {
+          "entail_bwd": 0.9204831994604319,
+          "entail_fwd": 0.8398750318185193,
+          "facts_preserved": 1.0,
+          "judge_rubric": 0.81,
+          "legal_register": 0.49195126118080085,
+          "negation_kept": 1.0,
+          "no_contractions": 1.0,
+          "no_preamble": 1.0,
+          "placeholders": 1.0,
+          "region_neutral": 1.0,
+          "similarity": 0.7943721115589142
+        }
+      }
+    },
+    "pairwise": {
+      "qwen3-1.7b-base": {
+        "n": 20,
+        "errors": 0,
+        "win": 8,
+        "tie": 2,
+        "loss": 10,
+        "win_rate": 0.4,
+        "win_or_tie_rate": 0.5,
+        "win_or_tie_ci95": [
+          0.2992949144298199,
+          0.70070508557018
+        ],
+        "at_par_or_better": true
+      }
+    }
+  },
+  "rows": [
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "17_business-027",
+      "category": "business_partnership",
+      "source": "The joint venture will last 5 years unless extended.",
+      "reference": "The Joint Venture shall continue for a term of five (5) years unless extended.",
+      "output": "The joint venture will last five years unless extended.",
+      "latency_ms": 1332,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 0.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.4,
+        "similarity": 0.9960679411888123,
+        "entail_fwd": 0.995682954788208,
+        "entail_bwd": 0.9941955208778381
+      },
+      "reasons": {
+        "facts_preserved": "missing numbers: 5",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The meaning is preserved and there is no preamble, but the register is not clearly formal legal drafting; it retains plain 'will last' and the passive 'unless extended' rather than using more precise legal phrasing (e.g., 'shall continue for a term of five years unless extended...'). The only change"
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "17_business-027",
+      "category": "business_partnership",
+      "source": "The joint venture will last 5 years unless extended.",
+      "reference": "The Joint Venture shall continue for a term of five (5) years unless extended.",
+      "output": "The joint venture shall remain in effect for a term of five (5) years unless extended.",
+      "latency_ms": 2020,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.625,
+        "judge_rubric": 1.0,
+        "similarity": 0.9112491011619568,
+        "entail_fwd": 0.9985369443893433,
+        "entail_bwd": 0.9983795881271362
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 6.2/100 words",
+        "judge_rubric": "The output fully preserves the original meaning, uses formal legal drafting language ('shall remain in effect for a term of five (5) years'), and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "23_casual-024",
+      "category": "casual_inputs",
+      "source": "if u wanna cancel, do it before the 15th or u still pay for the month",
+      "reference": "Any cancellation shall be made before the fifteenth (15th) day of the month, failing which the fee for that month shall remain payable.",
+      "output": "If the User wishes to cancel, the User shall do so not later than the fifteenth (15th) day of the month in which the subscription is due.",
+      "latency_ms": 3083,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.37037037037037035,
+        "judge_rubric": 0.2,
+        "similarity": 0.7616860866546631,
+        "entail_fwd": 0.9713771343231201,
+        "entail_bwd": 0.008887841366231441
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 3.7/100 words",
+        "judge_rubric": "The output changes 'before the 15th' to 'not later than the fifteenth', altering the deadline, and it omits the consequence that the user must still pay for the month if they do not cancel in time. It also introduces 'subscription is due', which is not in the original. Therefore meaning is not fully"
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "23_casual-024",
+      "category": "casual_inputs",
+      "source": "if u wanna cancel, do it before the 15th or u still pay for the month",
+      "reference": "Any cancellation shall be made before the fifteenth (15th) day of the month, failing which the fee for that month shall remain payable.",
+      "output": "If you wish to cancel, do so before the 15th or you will be charged for the month.",
+      "latency_ms": 1923,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.9391977190971375,
+        "entail_fwd": 0.9984188079833984,
+        "entail_bwd": 0.9970260262489319
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The rewrite preserves the condition and consequence, uses formal wording with no contractions or slang, and includes no preamble."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "16_community-050",
+      "category": "community_rules",
+      "source": "Each apartment gets one vote.",
+      "reference": "Each apartment shall be entitled to one (1) vote.",
+      "output": "Each unit shall be entitled to one (1) vote.",
+      "latency_ms": 696,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 1.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.5641640424728394,
+        "entail_fwd": 0.9956419467926025,
+        "entail_bwd": 0.7121515274047852
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 22.2/100 words",
+        "judge_rubric": "The output preserves the original meaning using formal legal drafting ('shall be entitled to' and the numeric 'one (1)'), and contains no preamble or commentary. 'Unit' functions as a jurisdiction-neutral legal synonym for 'apartment' in this voting-rights context."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "16_community-050",
+      "category": "community_rules",
+      "source": "Each apartment gets one vote.",
+      "reference": "Each apartment shall be entitled to one (1) vote.",
+      "output": "Each apartment shall be entitled to one vote.",
+      "latency_ms": 494,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 1.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.8483827114105225,
+        "entail_fwd": 0.993093729019165,
+        "entail_bwd": 0.9952318072319031
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 25.0/100 words",
+        "judge_rubric": "The meaning is fully preserved: each apartment has one vote. The phrasing 'shall be entitled to' is formal legal drafting, and there is no preamble or commentary."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "13_consumer-014",
+      "category": "consumer_refunds",
+      "source": "If we cancel your flight, you can choose a refund or a new flight.",
+      "reference": "If the Airline cancels a flight, the Passenger may elect to receive either a refund or an alternative flight.",
+      "output": "If we cancel your flight, you may choose a refund or a new flight.",
+      "latency_ms": 579,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.990473747253418,
+        "entail_fwd": 0.9977425336837769,
+        "entail_bwd": 0.9972077012062073
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The rewrite preserves the original meaning exactly and only changes 'can' to the more formal legal 'may,' with no added or dropped obligations, conditions, parties, or facts, and no preamble or commentary."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "13_consumer-014",
+      "category": "consumer_refunds",
+      "source": "If we cancel your flight, you can choose a refund or a new flight.",
+      "reference": "If the Airline cancels a flight, the Passenger may elect to receive either a refund or an alternative flight.",
+      "output": "In the event of a cancellation of the flight, the Customer may elect to receive a refund or a replacement flight.",
+      "latency_ms": 980,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.7935397624969482,
+        "entail_fwd": 0.9986448884010315,
+        "entail_bwd": 0.9966961145401001
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The meaning is preserved: a cancellation triggers the customer's choice of refund or replacement flight; the language is formal and legal; no preamble or commentary is present."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "03_confidentiality-050",
+      "category": "contracts_confidentiality",
+      "source": "The board minutes are confidential and only directors may read them.",
+      "reference": "The minutes of board meetings shall be confidential and accessible solely to the directors.",
+      "output": "The board minutes are confidential and may be read only by directors.",
+      "latency_ms": 519,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.9846159219741821,
+        "entail_fwd": 0.9963065385818481,
+        "entail_bwd": 0.996307373046875
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output preserves the original meaning exactly, uses formal legal language ('may be read only by directors'), and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "03_confidentiality-050",
+      "category": "contracts_confidentiality",
+      "source": "The board minutes are confidential and only directors may read them.",
+      "reference": "The minutes of board meetings shall be confidential and accessible solely to the directors.",
+      "output": "The minutes of the Board shall be confidential and shall be accessible only to the directors.",
+      "latency_ms": 828,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 1.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.885498046875,
+        "entail_fwd": 0.9972189664840698,
+        "entail_bwd": 0.9948291182518005
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 12.5/100 words",
+        "judge_rubric": "The rewrite fully preserves the original meaning: board minutes are confidential and only directors may access/read them. It uses formal legal language ('shall be confidential', 'shall be accessible only to the directors') and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "05_ip-026",
+      "category": "contracts_ip",
+      "source": "You can't register any domain name that includes our brand.",
+      "reference": "The Distributor shall not register any domain name incorporating the Brand.",
+      "output": "You cannot register any domain name that includes our brand.",
+      "latency_ms": 521,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.3,
+        "similarity": 0.9806886911392212,
+        "entail_fwd": 0.9981786012649536,
+        "entail_bwd": 0.998110294342041
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output only changes 'can't' to 'cannot' and does not use clearly formal legal drafting language (e.g., 'shall not', 'may not', 'is prohibited from'); 'our brand' is also informal and vague. It preserves meaning but fails the formal legal register requirement."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "05_ip-026",
+      "category": "contracts_ip",
+      "source": "You can't register any domain name that includes our brand.",
+      "reference": "The Distributor shall not register any domain name incorporating the Brand.",
+      "output": "The Registrant shall not register any domain name containing the Company's brand.",
+      "latency_ms": 802,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.8333333333333334,
+        "judge_rubric": 1.0,
+        "similarity": 0.8585737943649292,
+        "entail_fwd": 0.9297013878822327,
+        "entail_bwd": 0.9950424432754517
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 8.3/100 words",
+        "judge_rubric": "The rewrite preserves the prohibition, converts informal 'you can't' and 'our brand' into formal legal terms 'The Registrant shall not' and 'the Company's brand', has no preamble, and is jurisdiction-neutral."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "04_liability-008",
+      "category": "contracts_liability",
+      "source": "The product is provided as is, with no guarantees.",
+      "reference": "The Product is provided \"as is\", without warranty of any kind.",
+      "output": "The Product is provided as is, without any warranties.",
+      "latency_ms": 702,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.6895716190338135,
+        "entail_fwd": 0.9964404702186584,
+        "entail_bwd": 0.9960773587226868
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The rewrite preserves the original meaning, uses formal legal terminology ('without any warranties'), and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "04_liability-008",
+      "category": "contracts_liability",
+      "source": "The product is provided as is, with no guarantees.",
+      "reference": "The Product is provided \"as is\", without warranty of any kind.",
+      "output": "The product is provided as is, with no guarantees.",
+      "latency_ms": 787,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.0,
+        "similarity": 1.0000001192092896,
+        "entail_fwd": 0.9868813753128052,
+        "entail_bwd": 0.9868813753128052
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output is identical to the input and is plain language, not clearly formal legal drafting; it fails the required register criterion."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "01_payment-010",
+      "category": "contracts_payment",
+      "source": "We can stop working if you haven't paid for 45 days.",
+      "reference": "The Provider may suspend performance of the Services if any amount remains unpaid for a period of forty-five (45) days after its due date.",
+      "output": "We can stop working if you haven't paid for 45 days.",
+      "latency_ms": 542,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 0.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 0.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.0,
+        "similarity": 1.0000001192092896,
+        "entail_fwd": 0.9930763244628906,
+        "entail_bwd": 0.9930763244628906
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negation/condition lost",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "1 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output is identical to the informal input and is not rewritten in formal, jurisdiction-neutral legal language, so it fails the register requirement."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "01_payment-010",
+      "category": "contracts_payment",
+      "source": "We can stop working if you haven't paid for 45 days.",
+      "reference": "The Provider may suspend performance of the Services if any amount remains unpaid for a period of forty-five (45) days after its due date.",
+      "output": "The Provider may terminate its services if the Client fails to pay for a period of forty-five (45) consecutive days.",
+      "latency_ms": 1218,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.5,
+        "judge_rubric": 1.0,
+        "similarity": 0.6198773384094238,
+        "entail_fwd": 0.9954183101654053,
+        "entail_bwd": 0.9955653548240662
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 5.0/100 words",
+        "judge_rubric": "The output fully preserves the original meaning, uses formal legal drafting conventions, and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "02_termination-026",
+      "category": "contracts_termination",
+      "source": "We'll warn you 30 days before closing an inactive account.",
+      "reference": "The Provider shall give not less than thirty (30) days' notice prior to closing an inactive account.",
+      "output": "We'll warn you thirty (30) days before closing an inactive account.",
+      "latency_ms": 524,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 0.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.3,
+        "similarity": 0.9854916334152222,
+        "entail_fwd": 0.9964054822921753,
+        "entail_bwd": 0.9945616126060486
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "1 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The meaning is preserved and there is no preamble, but the register is not clearly formal legal drafting because it retains the contraction 'We'll' and casual phrasing 'warn you,' with only the numeral changed to 'thirty (30).'"
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "02_termination-026",
+      "category": "contracts_termination",
+      "source": "We'll warn you 30 days before closing an inactive account.",
+      "reference": "The Provider shall give not less than thirty (30) days' notice prior to closing an inactive account.",
+      "output": "The Provider shall give the User thirty (30) days' notice before closing an inactive account.",
+      "latency_ms": 855,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.6666666666666667,
+        "judge_rubric": 1.0,
+        "similarity": 0.8095129728317261,
+        "entail_fwd": 0.9849866032600403,
+        "entail_bwd": 0.9852659106254578
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 6.7/100 words",
+        "judge_rubric": "The rewrite preserves the original meaning: it retains the 30-day advance warning before closing an inactive account, formalizes 'we/you' as 'Provider/User' without adding new parties or obligations, and uses formal legal drafting language with no preamble or commentary."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "06_employment-039",
+      "category": "employment",
+      "source": "Don't come to work under the influence of alcohol or drugs.",
+      "reference": "The Employee shall not report for work under the influence of alcohol or drugs.",
+      "output": "Employees shall not be required to attend the Company's office under the influence of alcohol or drugs.",
+      "latency_ms": 903,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.5882352941176471,
+        "judge_rubric": 0.0,
+        "similarity": 0.5766194462776184,
+        "entail_fwd": 0.03207964822649956,
+        "entail_bwd": 0.9846054315567017
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 5.9/100 words",
+        "judge_rubric": "The rewrite changes the obligation: the original prohibits attending work under the influence, while the rewrite says employees shall not be required to attend the office under the influence. This does not fully preserve the meaning and alters the obligation."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "06_employment-039",
+      "category": "employment",
+      "source": "Don't come to work under the influence of alcohol or drugs.",
+      "reference": "The Employee shall not report for work under the influence of alcohol or drugs.",
+      "output": "Do not come to work under the influence of alcohol or drugs.",
+      "latency_ms": 488,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.0,
+        "similarity": 0.9389665722846985,
+        "entail_fwd": 0.9961656332015991,
+        "entail_bwd": 0.9952137470245361
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output merely repeats the original plain-language instruction in second person and is not clearly formal legal drafting; therefore it fails the required register condition."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "15_everyday-054",
+      "category": "everyday_personal",
+      "source": "Payment for the spot is due on the 1st.",
+      "reference": "Payment for the parking space shall be due on the first (1st) day of each month.",
+      "output": "Payment for the spot shall be due on the first (1st) day of the following month.",
+      "latency_ms": 873,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.625,
+        "judge_rubric": 0.4,
+        "similarity": 0.8859269022941589,
+        "entail_fwd": 0.0005964375450275838,
+        "entail_bwd": 0.9870599508285522
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 6.2/100 words",
+        "judge_rubric": "The rewrite adds 'following month,' which introduces a temporal condition not stated in the input and may alter the payment due date; therefore the meaning is not fully preserved."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "15_everyday-054",
+      "category": "everyday_personal",
+      "source": "Payment for the spot is due on the 1st.",
+      "reference": "Payment for the parking space shall be due on the first (1st) day of each month.",
+      "output": "Payment for the spot shall be due on the first day.",
+      "latency_ms": 505,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.9090909090909092,
+        "judge_rubric": 1.0,
+        "similarity": 0.9152325391769409,
+        "entail_fwd": 0.992739737033844,
+        "entail_bwd": 0.9938242435455322
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 9.1/100 words",
+        "judge_rubric": "The rewrite uses formal legal wording ('shall be due') and changes colloquial 'the 1st' to 'the first day' without adding or omitting obligations, parties, or facts, and it contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "19_headings-004",
+      "category": "format_headings",
+      "source": "Keeping things secret",
+      "reference": "Confidentiality",
+      "output": "Keeping things secret.",
+      "latency_ms": 397,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.0,
+        "similarity": 0.9501368999481201,
+        "entail_fwd": 0.9825900197029114,
+        "entail_bwd": 0.9631271362304688
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output repeats the informal input phrase and does not use formal legal drafting, so it fails the register requirement."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "19_headings-004",
+      "category": "format_headings",
+      "source": "Keeping things secret",
+      "reference": "Confidentiality",
+      "output": "Confidentiality",
+      "latency_ms": 557,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.6445464491844177,
+        "entail_fwd": 0.9875708818435669,
+        "entail_bwd": 0.9891343712806702
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output translates 'Keeping things secret' into the formal legal term 'Confidentiality,' preserving the core meaning without adding or dropping obligations, conditions, parties, or facts, and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "20_list_items-002",
+      "category": "format_list_items",
+      "source": "no smoking indoors",
+      "reference": "the prohibition of smoking within the Premises;",
+      "output": "No smoking indoors;",
+      "latency_ms": 537,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.2,
+        "similarity": 0.9851180911064148,
+        "entail_fwd": 0.987941563129425,
+        "entail_bwd": 0.9908343553543091
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output merely capitalizes the input and adds a semicolon; it does not rewrite the phrase into formal legal drafting (e.g., 'Smoking is prohibited indoors' or 'No person shall smoke indoors')."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "20_list_items-002",
+      "category": "format_list_items",
+      "source": "no smoking indoors",
+      "reference": "the prohibition of smoking within the Premises;",
+      "output": "No smoking indoors.",
+      "latency_ms": 391,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.3,
+        "similarity": 0.9754998087882996,
+        "entail_fwd": 0.9945541620254517,
+        "entail_bwd": 0.9916456341743469
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output preserves the core prohibition and has no preamble, but it is not clearly formal legal drafting; it is a plain imperative/sign-style phrase rather than a formal, jurisdiction-neutral legal formulation."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "22_paragraphs-039",
+      "category": "format_paragraphs",
+      "source": "All staff must complete the security course by October 31. Access will be suspended for anyone who hasn't.",
+      "reference": "All staff shall complete the security course by October 31. Access shall be suspended for any staff member who has not completed the course by that date.",
+      "output": "All staff must complete the security course by October 31. Access will be suspended for anyone who has not completed the course.",
+      "latency_ms": 666,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.9832281470298767,
+        "entail_fwd": 0.5868681073188782,
+        "entail_bwd": 0.9948516488075256
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The rewrite preserves the original obligations, parties, conditions, and facts without adding or dropping anything. It uses formal, explicit language ('has not completed the course' instead of the contraction 'hasn't'), is jurisdiction-neutral, and contains no preamble or commentary. While 'shall' c"
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "22_paragraphs-039",
+      "category": "format_paragraphs",
+      "source": "All staff must complete the security course by October 31. Access will be suspended for anyone who hasn't.",
+      "reference": "All staff shall complete the security course by October 31. Access shall be suspended for any staff member who has not completed the course by that date.",
+      "output": "All employees shall complete the security course by October 31. Access shall be suspended for any employee who has not completed the course.",
+      "latency_ms": 1023,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.8695652173913043,
+        "judge_rubric": 1.0,
+        "similarity": 0.9167978763580322,
+        "entail_fwd": 0.9915862083435059,
+        "entail_bwd": 0.9916340112686157
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 8.7/100 words",
+        "judge_rubric": "The rewrite preserves the original obligations and parties using formal legal terms ('employees', 'shall', 'suspended'), adds no commentary, and maintains the full meaning."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "21_placeholders-021",
+      "category": "format_placeholders",
+      "source": "Agree to ⟦0⟧ and ⟦1⟧ to continue.",
+      "reference": "The User shall accept ⟦0⟧ and ⟦1⟧ in order to proceed.",
+      "output": "The User agrees to ⟦0⟧ and ⟦1⟧ in order to continue.",
+      "latency_ms": 1205,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.7188518047332764,
+        "entail_fwd": 0.9947437047958374,
+        "entail_bwd": 0.9961451292037964
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The rewrite preserves the obligation to agree to both items as a condition of continuing, states it in formal declarative legal language with an explicit subject, and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "21_placeholders-021",
+      "category": "format_placeholders",
+      "source": "Agree to ⟦0⟧ and ⟦1⟧ to continue.",
+      "reference": "The User shall accept ⟦0⟧ and ⟦1⟧ in order to proceed.",
+      "output": "Agree to ⟦0⟧ and ⟦1⟧ to continue.",
+      "latency_ms": 836,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.2,
+        "similarity": 1.0,
+        "entail_fwd": 0.9728217720985413,
+        "entail_bwd": 0.9728217720985413
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output is identical to the input and uses plain instructional phrasing rather than a clearly formal legal drafting register, so it fails criterion (2), though it preserves meaning and has no commentary."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "07_lease-044",
+      "category": "leases_property",
+      "source": "If the buyer can't get a mortgage, the deposit is returned.",
+      "reference": "If the Buyer is unable to obtain mortgage financing, the deposit shall be refunded to the Buyer.",
+      "output": "If the Buyer is unable to obtain a mortgage, the deposit shall be returned.",
+      "latency_ms": 1218,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.7142857142857143,
+        "judge_rubric": 1.0,
+        "similarity": 0.9662840962409973,
+        "entail_fwd": 0.9978546500205994,
+        "entail_bwd": 0.9985407590866089
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 7.1/100 words",
+        "judge_rubric": "The output preserves the original conditional meaning, converts the language to formal legal drafting with 'shall be returned' and 'unable to obtain a mortgage,' and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "07_lease-044",
+      "category": "leases_property",
+      "source": "If the buyer can't get a mortgage, the deposit is returned.",
+      "reference": "If the Buyer is unable to obtain mortgage financing, the deposit shall be refunded to the Buyer.",
+      "output": "If the buyer cannot obtain a mortgage, the deposit shall be returned.",
+      "latency_ms": 510,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.8333333333333334,
+        "judge_rubric": 1.0,
+        "similarity": 0.9632026553153992,
+        "entail_fwd": 0.997759222984314,
+        "entail_bwd": 0.9984139204025269
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 8.3/100 words",
+        "judge_rubric": "The rewrite preserves the original meaning, converts informal contractions into formal legal terms, includes no additional content or commentary, and uses 'shall be returned' appropriate for formal legal drafting."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "18_loans_tech-007",
+      "category": "loans_finance",
+      "source": "You can't sell the car until the loan is paid off.",
+      "reference": "The Borrower shall not sell the Vehicle until the Loan has been repaid in full.",
+      "output": "You can't sell the car until the loan is paid off.",
+      "latency_ms": 508,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 0.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.0,
+        "similarity": 1.0000001192092896,
+        "entail_fwd": 0.9971760511398315,
+        "entail_bwd": 0.9971760511398315
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "1 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output is identical to the informal input and uses the contraction 'can't', so it does not meet the required formal legal drafting register."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "18_loans_tech-007",
+      "category": "loans_finance",
+      "source": "You can't sell the car until the loan is paid off.",
+      "reference": "The Borrower shall not sell the Vehicle until the Loan has been repaid in full.",
+      "output": "The Buyer shall not sell the Vehicle until the outstanding balance of the loan has been paid.",
+      "latency_ms": 831,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.5882352941176471,
+        "judge_rubric": 1.0,
+        "similarity": 0.8083440065383911,
+        "entail_fwd": 0.9856517314910889,
+        "entail_bwd": 0.9956101775169373
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 5.9/100 words",
+        "judge_rubric": "The rewrite preserves the original prohibition and condition, uses formal legal terms ('The Buyer shall not sell the Vehicle until...'), and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "14_notices-026",
+      "category": "notices_demands",
+      "source": "If you don't respond within 14 days, I'll take the matter further.",
+      "reference": "Should no response be received within fourteen (14) days, the Buyer shall pursue the matter further.",
+      "output": "If no response is received within fourteen (14) days, the Company may take the matter further.",
+      "latency_ms": 876,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.4,
+        "similarity": 0.6108863949775696,
+        "entail_fwd": 0.03730056807398796,
+        "entail_bwd": 0.9565457701683044
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output is formal and concise, but it changes the party from first-person 'I' to 'the Company' and changes 'will take' to 'may take', altering the obligation and introducing a party not in the original. Therefore meaning is not fully preserved."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "14_notices-026",
+      "category": "notices_demands",
+      "source": "If you don't respond within 14 days, I'll take the matter further.",
+      "reference": "Should no response be received within fourteen (14) days, the Buyer shall pursue the matter further.",
+      "output": "If you do not respond within 14 days, I will take the matter further.",
+      "latency_ms": 557,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 1.0,
+        "similarity": 0.9792810082435608,
+        "entail_fwd": 0.9972077012062073,
+        "entail_bwd": 0.9964311122894287
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output expands the contractions without altering meaning; it is formal and jurisdiction-neutral, and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "10_privacy-036",
+      "category": "privacy_data",
+      "source": "Job applicant data is kept for 6 months and then deleted.",
+      "reference": "Personal data of job applicants shall be retained for six (6) months and deleted thereafter.",
+      "output": "Job applicant data is kept for six months and then deleted.",
+      "latency_ms": 501,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 0.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.0,
+        "similarity": 0.9983847141265869,
+        "entail_fwd": 0.9963045120239258,
+        "entail_bwd": 0.9920923113822937
+      },
+      "reasons": {
+        "facts_preserved": "missing numbers: 6",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output is essentially identical to the input and uses plain, non-legal phrasing such as 'is kept' rather than formal legal drafting like 'shall be retained'; it therefore fails the register requirement."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "10_privacy-036",
+      "category": "privacy_data",
+      "source": "Job applicant data is kept for 6 months and then deleted.",
+      "reference": "Personal data of job applicants shall be retained for six (6) months and deleted thereafter.",
+      "output": "Job applicant data shall be retained for a period of six (6) months and thereafter deleted.",
+      "latency_ms": 1040,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.625,
+        "judge_rubric": 1.0,
+        "similarity": 0.9120970368385315,
+        "entail_fwd": 0.9984754920005798,
+        "entail_bwd": 0.9983217120170593
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 6.2/100 words",
+        "judge_rubric": "The rewrite preserves the original meaning exactly, uses formal legal language ('shall be retained', 'thereafter deleted'), and contains no preamble or commentary."
+      }
+    },
+    {
+      "system": "qwen3-1.7b-base",
+      "test_id": "09_sales-025",
+      "category": "sales_delivery",
+      "source": "The buyer will pay $8,200 in cash at the time of handover.",
+      "reference": "The Buyer shall pay $8,200 in cash upon handover of the Vehicle.",
+      "output": "The buyer will pay $8,200 in cash at the time of handover.",
+      "latency_ms": 555,
+      "passed": false,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.0,
+        "judge_rubric": 0.3,
+        "similarity": 1.0000001192092896,
+        "entail_fwd": 0.991359531879425,
+        "entail_bwd": 0.991359531879425
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 0.0/100 words",
+        "judge_rubric": "The output is identical to the input and uses plain language ('will pay', 'at the time of handover') rather than clearly formal legal drafting, so it does not meet the rewrite requirement even though meaning is preserved."
+      }
+    },
+    {
+      "system": "lexcraft-lora",
+      "test_id": "09_sales-025",
+      "category": "sales_delivery",
+      "source": "The buyer will pay $8,200 in cash at the time of handover.",
+      "reference": "The Buyer shall pay $8,200 in cash upon handover of the Vehicle.",
+      "output": "The Buyer shall pay $8,200 in cash upon completion of the handover.",
+      "latency_ms": 860,
+      "passed": true,
+      "error": null,
+      "metrics": {
+        "facts_preserved": 1.0,
+        "placeholders": 1.0,
+        "negation_kept": 1.0,
+        "region_neutral": 1.0,
+        "no_preamble": 1.0,
+        "no_contractions": 1.0,
+        "legal_register": 0.8333333333333334,
+        "judge_rubric": 1.0,
+        "similarity": 0.9682973623275757,
+        "entail_fwd": 0.9157330989837646,
+        "entail_bwd": 0.8383370637893677
+      },
+      "reasons": {
+        "facts_preserved": "facts preserved",
+        "placeholders": "placeholders ok",
+        "negation_kept": "negations kept",
+        "region_neutral": "region-neutral",
+        "no_preamble": "no preamble",
+        "no_contractions": "0 contractions",
+        "legal_register": "legal marker density 8.3/100 words",
+        "judge_rubric": "The sentence preserves the original obligation and amount, uses formal legal language ('shall', 'upon completion'), and contains no commentary."
+      }
+    }
+  ],
+  "verdicts": [
+    {
+      "test_id": "17_business-027",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "primary",
+      "reasons": [
+        "A uses formal legal phrasing and precise term language while preserving the original meaning and facts.",
+        "B preserves the original meaning while using more precise, formal legal drafting and clarifying the duration term."
+      ],
+      "raw": [
+        "{\"winner\": \"A\", \"reason\": \"A uses formal legal phrasing and precise term language while preserving the original meaning and facts.\"}",
+        "{\"winner\": \"B\", \"reason\": \"B preserves the original meaning while using more precise, formal legal drafting and clarifying the duration term.\"}"
+      ]
+    },
+    {
+      "test_id": "16_community-050",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "B preserves the original term \"apartment\" exactly while using formal legal phrasing, whereas A changes it to \"unit,\" altering the potential meaning.",
+        "A preserves the original term 'apartment' while formalizing the verb, whereas B changes it to 'unit,' altering the stated term."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"B preserves the original term \\\"apartment\\\" exactly while using formal legal phrasing, whereas A changes it to \\\"unit,\\\" altering the potential meaning.\"}",
+        "{\"winner\": \"A\", \"reason\": \"A preserves the original term 'apartment' while formalizing the verb, whereas B changes it to 'unit,' altering the stated term.\"}"
+      ]
+    },
+    {
+      "test_id": "23_casual-024",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "B preserves the original deadline and consequence, while A changes the deadline to the 15th and omits the payment obligation.",
+        "A preserves the original deadline and meaning, while B changes 'before the 15th' to 'not later than the fifteenth' and adds unstated terms."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"B preserves the original deadline and consequence, while A changes the deadline to the 15th and omits the payment obligation.\"}",
+        "{\"winner\": \"A\", \"reason\": \"A preserves the original deadline and meaning, while B changes 'before the 15th' to 'not later than the fifteenth' and adds unstated terms.\"}"
+      ]
+    },
+    {
+      "test_id": "05_ip-026",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "primary",
+      "reasons": [
+        "A uses formal legal terms and precise obligations while preserving the original meaning.",
+        "Rewrite B uses formal legal drafting and preserves the original prohibition, whereas Rewrite A remains informal."
+      ],
+      "raw": [
+        "{\"winner\": \"A\", \"reason\": \"A uses formal legal terms and precise obligations while preserving the original meaning.\"}",
+        "{\"winner\": \"B\", \"reason\": \"Rewrite B uses formal legal drafting and preserves the original prohibition, whereas Rewrite A remains informal.\"}"
+      ]
+    },
+    {
+      "test_id": "03_confidentiality-050",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "tie",
+      "reasons": [
+        "A better matches the requested formal legal register while preserving the original meaning and restriction to directors.",
+        "A preserves the exact permission and scope of 'read only by directors,' while B's 'accessible' slightly broadens the original 'read' meaning."
+      ],
+      "raw": [
+        "{\"winner\": \"A\", \"reason\": \"A better matches the requested formal legal register while preserving the original meaning and restriction to directors.\"}",
+        "{\"winner\":\"A\",\"reason\":\"A preserves the exact permission and scope of 'read only by directors,' while B's 'accessible' slightly broadens the original 'read' meaning.\"}"
+      ]
+    },
+    {
+      "test_id": "02_termination-026",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "primary",
+      "reasons": [
+        "A preserves the original meaning while using formal, precise legal language and explicit party references.",
+        "B uses formal, precise legal language while preserving the original meaning and facts, whereas A remains informal with the contraction \"We'll\" and non-legal \"warn.\""
+      ],
+      "raw": [
+        "{\"winner\": \"A\", \"reason\": \"A preserves the original meaning while using formal, precise legal language and explicit party references.\"}",
+        "{\"winner\": \"B\", \"reason\": \"B uses formal, precise legal language while preserving the original meaning and facts, whereas A remains informal with the contraction \\\"We'll\\\" and non-legal \\\"warn.\\\"\"}"
+      ]
+    },
+    {
+      "test_id": "01_payment-010",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "primary",
+      "reasons": [
+        "A preserves the original meaning and structure while using formal, jurisdiction-neutral legal drafting, whereas B remains informal and unchanged.",
+        "B is formal legal drafting and preserves the original condition without material change, while A is unchanged and not legal register."
+      ],
+      "raw": [
+        "{\"winner\": \"A\", \"reason\": \"A preserves the original meaning and structure while using formal, jurisdiction-neutral legal drafting, whereas B remains informal and unchanged.\"}",
+        "{\"winner\": \"B\", \"reason\": \"B is formal legal drafting and preserves the original condition without material change, while A is unchanged and not legal register.\"}"
+      ]
+    },
+    {
+      "test_id": "06_employment-039",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "Rewrite B preserves the original prohibition exactly, while Rewrite A changes the obligation and scope.",
+        "Rewrite A preserves the original prohibition exactly, while Rewrite B changes it into a statement about not being required to attend and alters key terms."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"Rewrite B preserves the original prohibition exactly, while Rewrite A changes the obligation and scope.\"}",
+        "{\"winner\": \"A\", \"reason\": \"Rewrite A preserves the original prohibition exactly, while Rewrite B changes it into a statement about not being required to attend and alters key terms.\"}"
+      ]
+    },
+    {
+      "test_id": "13_consumer-014",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "B preserves the original actor, condition, and scope exactly while remaining suitably formal, whereas A's passive wording omits who cancels and may broaden the trigger.",
+        "A preserves the original condition and parties exactly, while B removes the actor and broadens the cancellation trigger."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"B preserves the original actor, condition, and scope exactly while remaining suitably formal, whereas A's passive wording omits who cancels and may broaden the trigger.\"}",
+        "{\"winner\": \"A\", \"reason\": \"A preserves the original condition and parties exactly, while B removes the actor and broadens the cancellation trigger.\"}"
+      ]
+    },
+    {
+      "test_id": "20_list_items-002",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "Both preserve meaning, but a period is more appropriate than a semicolon for a standalone prohibition.",
+        "A uses a period to properly close the standalone prohibition, while B's semicolon is grammatically and structurally incongruent."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"Both preserve meaning, but a period is more appropriate than a semicolon for a standalone prohibition.\"}",
+        "{\"winner\": \"A\", \"reason\": \"A uses a period to properly close the standalone prohibition, while B's semicolon is grammatically and structurally incongruent.\"}"
+      ]
+    },
+    {
+      "test_id": "19_headings-004",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "primary",
+      "reasons": [
+        "Confidentiality is the standard formal legal term that preserves the original meaning while B merely repeats the informal phrase.",
+        "B uses the standard formal legal term for the same concept without altering the meaning, while A merely repeats the informal original wording."
+      ],
+      "raw": [
+        "{\"winner\": \"A\", \"reason\": \"Confidentiality is the standard formal legal term that preserves the original meaning while B merely repeats the informal phrase.\"}",
+        "{\"winner\": \"B\", \"reason\": \"B uses the standard formal legal term for the same concept without altering the meaning, while A merely repeats the informal original wording.\"}"
+      ]
+    },
+    {
+      "test_id": "15_everyday-054",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "B preserves the original meaning without adding the unsupported obligation of 'following month' found in A.",
+        "A preserves the original timing without adding the unsupported phrase 'of the following month' that alters the obligation in B."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"B preserves the original meaning without adding the unsupported obligation of 'following month' found in A.\"}",
+        "{\"winner\": \"A\", \"reason\": \"A preserves the original timing without adding the unsupported phrase 'of the following month' that alters the obligation in B.\"}"
+      ]
+    },
+    {
+      "test_id": "22_paragraphs-039",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "B better preserves the original scope by retaining 'staff' and 'anyone,' whereas A may narrow the obligation to employees.",
+        "A preserves the original term 'staff' and exact obligation, while B changes the party scope to 'employees' and alters the modal verb."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"B better preserves the original scope by retaining 'staff' and 'anyone,' whereas A may narrow the obligation to employees.\"}",
+        "{\"winner\": \"A\", \"reason\": \"A preserves the original term 'staff' and exact obligation, while B changes the party scope to 'employees' and alters the modal verb.\"}"
+      ]
+    },
+    {
+      "test_id": "21_placeholders-021",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "B preserves the original imperative meaning exactly, while A changes it to a declarative statement.",
+        "A preserves the original meaning and obligation exactly, while B changes the imperative instruction into a third-party declaration that may alter meaning."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"B preserves the original imperative meaning exactly, while A changes it to a declarative statement.\"}",
+        "{\"winner\": \"A\", \"reason\": \"A preserves the original meaning and obligation exactly, while B changes the imperative instruction into a third-party declaration that may alter meaning.\"}"
+      ]
+    },
+    {
+      "test_id": "07_lease-044",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "tie",
+      "reasons": [
+        "Both preserve the original meaning and achieve an equivalent formal, jurisdiction-neutral legal register, with no material differences.",
+        "A preserves the original meaning and structure more closely while using formal legal language without unnecessary capitalization."
+      ],
+      "raw": [
+        "{\"winner\": \"tie\", \"reason\": \"Both preserve the original meaning and achieve an equivalent formal, jurisdiction-neutral legal register, with no material differences.\"}",
+        "{\"winner\": \"A\", \"reason\": \"A preserves the original meaning and structure more closely while using formal legal language without unnecessary capitalization.\"}"
+      ]
+    },
+    {
+      "test_id": "14_notices-026",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "B preserves the original parties, obligation, and number, whereas A introduces a new party and changes 'will' to permissive 'may'.",
+        "Rewrite A preserves the original parties and mandatory tone, while Rewrite B changes 'I' to 'the Company' and 'will' to 'may,' altering the obligation and party."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"B preserves the original parties, obligation, and number, whereas A introduces a new party and changes 'will' to permissive 'may'.\"}",
+        "{\"winner\": \"A\", \"reason\": \"Rewrite A preserves the original parties and mandatory tone, while Rewrite B changes 'I' to 'the Company' and 'will' to 'may,' altering the obligation and party.\"}"
+      ]
+    },
+    {
+      "test_id": "04_liability-008",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "primary",
+      "reasons": [
+        "A uses formal legal wording while preserving the disclaimer's substantive meaning.",
+        "B preserves the substantive disclaimer while using the standard legal term 'warranties,' making it more formal than A's verbatim informal wording."
+      ],
+      "raw": [
+        "{\"winner\": \"A\", \"reason\": \"A uses formal legal wording while preserving the disclaimer's substantive meaning.\"}",
+        "{\"winner\": \"B\", \"reason\": \"B preserves the substantive disclaimer while using the standard legal term 'warranties,' making it more formal than A's verbatim informal wording.\"}"
+      ]
+    },
+    {
+      "test_id": "10_privacy-036",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "primary",
+      "reasons": [
+        "A expresses the same retention period and deletion requirement in a more formal legal register without altering meaning.",
+        "B preserves the exact meaning and facts while using more precise, formal legal drafting."
+      ],
+      "raw": [
+        "{\"winner\": \"A\", \"reason\": \"A expresses the same retention period and deletion requirement in a more formal legal register without altering meaning.\"}",
+        "{\"winner\": \"B\", \"reason\": \"B preserves the exact meaning and facts while using more precise, formal legal drafting.\"}"
+      ]
+    },
+    {
+      "test_id": "18_loans_tech-007",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "primary",
+      "reasons": [
+        "A uses formal legal register and preserves the core prohibition and condition, while B is unchanged and not legal drafting.",
+        "B preserves the original prohibition and condition while using formal legal language; A merely repeats the informal original."
+      ],
+      "raw": [
+        "{\"winner\": \"A\", \"reason\": \"A uses formal legal register and preserves the core prohibition and condition, while B is unchanged and not legal drafting.\"}",
+        "{\"winner\": \"B\", \"reason\": \"B preserves the original prohibition and condition while using formal legal language; A merely repeats the informal original.\"}"
+      ]
+    },
+    {
+      "test_id": "09_sales-025",
+      "primary": "lexcraft-lora",
+      "other": "qwen3-1.7b-base",
+      "winner": "other",
+      "reasons": [
+        "A alters the timing condition by changing 'at the time of handover' to 'upon completion of the handover,' while B preserves the exact meaning.",
+        "A preserves the exact meaning and timing of the original, while B's 'upon completion of the handover' may subtly alter when payment is due."
+      ],
+      "raw": [
+        "{\"winner\": \"B\", \"reason\": \"A alters the timing condition by changing 'at the time of handover' to 'upon completion of the handover,' while B preserves the exact meaning.\"}",
+        "{\"winner\": \"A\", \"reason\": \"A preserves the exact meaning and timing of the original, while B's 'upon completion of the handover' may subtly alter when payment is due.\"}"
+      ]
+    }
+  ]
+}

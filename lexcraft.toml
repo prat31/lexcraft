@@ -1,0 +1,32 @@
+# lexcraft configuration. Relative paths resolve against this file.
+# Secrets (API keys) live in .env, never here.
+
+[model]
+base = "Qwen/Qwen3-1.7B"                                     # Hugging Face base model (CUDA training, GGUF)
+mlx_base = "mlx-community/Qwen3-1.7B-4bit"                   # same model, 4-bit MLX (QLoRA + Apple Silicon inference)
+adapter = "artifacts/adapters/lexcraft-qwen3-1.7b"           # LoRA adapter (output of `lexcraft train`)
+fused_mlx = "artifacts/models/lexcraft-qwen3-1.7b-mlx-8bit"  # fused + quantized MLX model (`lexcraft export`)
+gguf = "artifacts/models/lexcraft-qwen3-1.7b-q8_0.gguf"    # GGUF for llama.cpp (`lexcraft export --gguf`)
+backend = "auto"                                             # auto | mlx | llamacpp | remote
+
+[generation]
+max_tokens = 1024
+temperature = 0.0
+verify = true
+
+[train]
+data_dir = "data/processed"
+iters = 600
+batch_size = 4
+learning_rate = 1e-4
+lora_rank = 16
+lora_alpha = 32.0
+lora_dropout = 0.05
+num_layers = -1
+max_seq_length = 512
+grad_checkpoint = true
+steps_per_report = 10
+steps_per_eval = 50
+save_every = 50                # = steps_per_eval, so the best checkpoint is kept
+early_stopping_patience = 2    # stop after 2 evals without val-loss improvement (0 = off)
+seed = 42

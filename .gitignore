@@ -1,0 +1,35 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Model artefacts (large; publish to Hugging Face instead)
+artifacts/
+*.safetensors
+*.gguf
+
+# Derived data (rebuild with `lexcraft data build`; seed pairs in data/seed are tracked)
+data/processed/
+
+# Eval runs (keep runs you want to publish by copying them elsewhere)
+eval/runs/
+.promptfoo/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
